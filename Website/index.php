@@ -26,6 +26,19 @@
 				flex-shrink: 0;
 				width: 300px;
 				height: 400px;
+				background-size: contain;
+				background-repeat: no-repeat;
+				margin: 0 20px 50px 0;
+			}
+			@media all and (max-width: 800px) {
+				.cover {
+					width: 200px;
+				}
+			}
+			@media all and (max-width: 500px) {
+				.cover {
+					width: 150px;
+				}
 			}
 		</style>
 	</head>
@@ -65,8 +78,7 @@
 			$(function() {
 				var count = 0;
 				for(var gameKey in stats) {
-					$(".games").append("<div class='gameContainer'><div class='cover'></div><div class='game game"+count+"'></div></div>");
-
+					$(".games").append("<div class='gameContainer'><div class='cover' style='background-image: url(\"images/cover_"+gameKey.replace(/[^a-zA-Z1-9]/gi, "")+".jpg\");'></div><div class='game game"+count+"'></div></div>");
 					$('.game'+count).highcharts('StockChart', {
 						rangeSelector: {
 							buttons: [{
@@ -87,9 +99,6 @@
 								}],
 							selected: 0
 						},
-						yAxis: {
-							// min: -1
-						},
 						title: {
 							text: gameKey
 						},
@@ -104,54 +113,6 @@
 					count++;
 				}
 			});
-			/*
-			$(function() {
-				$.getJSON('/data/Network?callback=?', function(data) {
-	// Create the chart
-	$('#Network').highcharts('StockChart', {
-		rangeSelector: {
-			buttons: [{
-					type: 'hour',
-					count: 2,
-					text: '2h'
-				}, {
-					type: 'hour',
-					count: 12,
-					text: '12h'
-				}, {
-					type: 'day',
-					count: 1,
-					text: '1d'
-				}, {
-					type: 'day',
-					count: 3,
-					text: '3d'
-				}, {
-					type: 'week',
-					count: 1,
-					text: '1w'
-				}, {
-					type: 'all',
-					text: 'All'
-				}],
-			selected: 0
-		},
-		yAxis: {
-			// min: -1
-		},
-		title: {
-			text: 'Network'
-		},
-		series: [{
-				name: 'Player Count',
-				data: data,
-				tooltip: {
-					valueDecimals: 0
-				}
-			}]
-	});
-});
-*/
 		</script>
 	</body>
 </html>

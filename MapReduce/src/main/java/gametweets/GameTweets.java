@@ -144,7 +144,7 @@ public class GameTweets {
 		games.put("FIFA 14", new HashSet<>(Arrays.asList("FIFA 14")));
 		games.put("Call of Duty: Black Ops II", new HashSet<>(Arrays.asList("Black Ops 2", "Black Ops II", "BO2")));
 		games.put("FIFA 13", new HashSet<>(Arrays.asList("FIFA 13")));
-		games.put("Call of Duty: Ghost", new HashSet<>(Arrays.asList("Call of Duty: Ghosts", "CoD: Ghosts")));
+		games.put("Call of Duty: Ghosts", new HashSet<>(Arrays.asList("Call of Duty: Ghosts", "CoD: Ghosts")));
 		games.put("FIFA 12", new HashSet<>(Arrays.asList("FIFA 12")));
 		games.put("Call of Duty: Advanced Warfare", new HashSet<>(Arrays.asList("Call of Duty: Advanced Warfare",
 				"Cod: AW", "CoD: Advanced Warfare", "Call of Duty: AW")));
