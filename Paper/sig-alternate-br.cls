@@ -598,8 +598,7 @@
  \setcounter{footnote}{0}
  \let\maketitle\relax
  \let\@maketitle\relax
- \gdef\@thanks{}\gdef\@author{}\gdef\@title{}\gdef\@subtitle{}\let\thanks\relax
- \@copyrightspace}
+ \gdef\@thanks{}\gdef\@author{}\gdef\@title{}\gdef\@subtitle{}\let\thanks\relax}
 
 %% CHANGES ON NEXT LINES
 \newif\if@ll % to record which version of LaTeX is in use
@@ -837,17 +836,7 @@
 %%% displacement to offset the space allocated for a non-existent
 %%% caption).
 %%%
-\newtoks\copyrightnotice
-\def\ftype@copyrightbox{8}
-\def\@copyrightspace{
-\@float{copyrightbox}[b]
-\begin{center}
-\setlength{\unitlength}{1pc}
-\begin{picture}(20,6) %Space for copyright notice
-\put(0,-0.84){\crnotice{\@toappear}}
-\end{picture}
-\end{center}
-\end@float}
+
 
 \def\@toappear{} % Default setting blank - commands below change this.
 \long\def\toappear#1{\def\@toappear{\parbox[b]{19.3pc}{\baselineskip 9pt#1}}}
@@ -1435,17 +1424,15 @@
 \def\permission#1{\global\boilerplate{#1}}
 %
 %\global\boilerplate={Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page.  To copy otherwise, to republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee.}
-\global\boilerplate={Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. To copy
-otherwise, or republish, to post on servers or to redistribute to lists,
-requires prior specific permission and/or a fee.}
+\global\boilerplate={}
 
 
 \newtoks\copyrightetc
 %\global\copyrightetc{Copyright \the\copyrtyr\ ACM \the\acmcopyr\ ...\$10.00}
-\global\copyrightetc{Copyright \textnormal{\the\copyrtyr}, University of Twente, Faculty of Electrical Engineering, Mathematics and Computer Science}
+\global\copyrightetc{}
 
 \toappear{\the\boilerplate\par
-{\confname{\the\conf}} \the\confinfo\par \the\copyrightetc.}
+{\confname{\the\conf}} \the\confinfo\par \the\copyrightetc}
 %\DeclareFixedFont{\altcrnotice}{OT1}{tmr}{m}{n}{8}  % << patch needed for accenting e.g. Montreal - Gerry, May 2007
 %\DeclareFixedFont{\altconfname}{OT1}{tmr}{m}{it}{8}  % << patch needed for accenting in italicized confname - Gerry, May 2007
 %
