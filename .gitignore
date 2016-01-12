@@ -1,0 +1,8 @@
+/Paper/*.gz
+/Paper/*.log
+/Paper/*.aux
+/Paper/*.bbl
+/Paper/*.blg
+/Paper/*.out
+/Paper/*.tmp
+/Paper/*.pdf

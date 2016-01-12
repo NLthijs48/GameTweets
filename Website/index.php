@@ -102,6 +102,9 @@
 						title: {
 							text: gameKey
 						},
+						scrollbar : {
+							enabled : false
+						},
 						series: [{
 								name: 'Tweet Count',
 								data: stats[gameKey],
