@@ -56,7 +56,7 @@ public class GraphGenerator {
 						Calendar date = Calendar.getInstance();
 						date.setTimeInMillis(0);
 						date.set(Calendar.YEAR, parseInt(parts[1]));
-						date.set(Calendar.MONTH, parseInt(parts[2]));
+						date.set(Calendar.MONTH, parseInt(parts[2])-1);
 						date.set(Calendar.DAY_OF_MONTH, parseInt(parts[3]));
 						// Parse score
 						double score = 0;
@@ -66,13 +66,18 @@ public class GraphGenerator {
 							System.err.println("  Could not parse score: "+score);
 						}
 						// Add to map
-						Map<Long, Double> gameMap = gameStats.get(parts[0]);
+						String gameName = parts[0];
+						if (gameName.endsWith("Ghost")) {
+							gameName += "s";
+						} else if (gameName.contains("Revaltions")) {
+							gameName = gameName.replace("Revaltions", "Revelations");
+						}
+						Map<Long, Double> gameMap = gameStats.get(gameName);
 						if(gameMap == null) {
 							gameMap = new TreeMap<>();
 						}
 						gameMap.put(date.getTimeInMillis(), score);
-						gameStats.put(parts[0], gameMap);
-
+						gameStats.put(gameName, gameMap);
 						// Read next line
 						line = reader.readLine();
 					}
@@ -86,7 +91,27 @@ public class GraphGenerator {
 			System.err.println("No permission to read file");
 			e.printStackTrace();
 		}
-		progress("Done with collecting results, found games: "+gameStats.keySet().toString());
+		progress("Filling gaps in the data");
+		long firstTime = 1292457600000L;
+		long lastTime = 1446681600000L;
+		long period = 86400000L;
+		for (Map.Entry<String, Map<Long, Double>> gameMap : gameStats.entrySet()) {
+			long currentTime = firstTime;
+			int fillCount = 0;
+			int totalCount = 0;
+			Map<Long, Double> valueMap = gameMap.getValue();
+			while (currentTime <= lastTime) {
+				totalCount++;
+				if (!valueMap.containsKey(currentTime) && !valueMap.containsKey(currentTime-3600000L)) { // Account for 1 hour offset because of winter/summer time
+					valueMap.put(currentTime, 0.0);
+					fillCount++;
+				}
+				currentTime += period;
+			}
+			gameMap.setValue(valueMap);
+			progress("  Filled " + fillCount + " values for " + gameMap.getKey()+", totalcount="+totalCount);
+		}
+		progress("Done with collecting results, found games: " + gameStats.keySet().toString());
 	}
 
 	public void printDataFile() {
