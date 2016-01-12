@@ -1,2 +1,10 @@
 \section{Discussion}
-Discussion
+The MapReduce job took about 8 hours to complete on the cluster, so this meant that we could not perform this job often. To prevent us from needing to do this, we started by running our MapReduce code on smaller data sets, such as the number of tweets in one or two months. This allowed us to remove bugs from the code quickly, and test the data processing for the website before we ran the job on the complete data set.
+
+There are several things that may have influenced the results, such as:
+\begin{itemize}
+	\item We may not have been able to consider all tweets referring to specific games. Some tweets may only contain the name of the franchise, as people will not always spell out the game's full name. (FIFA 15 may become just FIFA, and Grand Theft Auto V may become just GTA).
+	\item Unfortunately, the collection of tweets does not span the full 100\% of Dutch tweets that were sent in the time period. The estimate is that the data set contains approximately 40\% of all the tweets. \cite{sangDealingWithBigData}
+	\item The time period during which tweets have been collected spans from December 16th, 2010 until November 5th, 2015. Because some of the games were released either before or right before the end of this time period, we may not have all tweets that refer to this game around its release.
+	\item Something else we have noticed, is that the number of tweets drops at around May 10th, 2014. This may be due to an error or an adaptation on Twiqs' side.
+\end{itemize}
