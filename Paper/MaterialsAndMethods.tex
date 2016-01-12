@@ -1,2 +1,6 @@
 \section{Materials and Methods}
-Materials and Methods section
+The MapReduce code is implemented in such way that the result have less data-noise and have as much game-related-tweets as possible. To achieve this, the data first is preprocessed. All tweets are converted to lowercase-text with only numbers and letters. This gives the opportunity to use less search terms, because all spaces and other special characters in the game names are filtered out the tweets. 
+
+
+The 20 top sold games in Europe since 2011 and their search terms are put in a HashMap, so that the tweets of all games can find in a single MapReduce job.
+  
