@@ -39,10 +39,17 @@ public class GraphGenerator {
 						if(line.length() == 0) {
 							continue;
 						}
+						// Detect errors
+						if(line.startsWith("Error")) {
+							System.err.println("  Found error line: "+line);
+							line = reader.readLine();
+							continue;
+						}
 						// Split game name, date and score
 						String[] parts = line.split("-|\t");
 						if(parts.length < 5) {
 							System.err.println("  Only "+parts.length+" parts in line: "+line);
+							line = reader.readLine();
 							continue;
 						}
 						// Parse date
