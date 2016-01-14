@@ -1,3 +1,5 @@
+package me.wiefferink.gametweets;
+
 import java.io.*;
 import java.util.*;
 
@@ -14,7 +16,7 @@ public class GraphGenerator {
 
 	public GraphGenerator() {
 		collectResults();
-		printDataFile();
+		printDataFile(gameStats, "data.php", "stats");
 	}
 
 	public void collectResults() {
@@ -24,7 +26,7 @@ public class GraphGenerator {
 		try {
 			File[] resultFiles = inputFolder.listFiles();
 			if(resultFiles == null || resultFiles.length == 0) {
-				System.err.println("No result files to read from at "+inputFolder.getAbsolutePath());
+				error("No result files to read from at "+inputFolder.getAbsolutePath());
 				return;
 			}
 			for (File resultFile : resultFiles) {
@@ -41,14 +43,14 @@ public class GraphGenerator {
 						}
 						// Detect errors
 						if(line.startsWith("Error")) {
-							System.err.println("  Found error line: "+line);
+							error("  Found error line: "+line);
 							line = reader.readLine();
 							continue;
 						}
 						// Split game name, date and score
 						String[] parts = line.split("-|\t");
 						if(parts.length < 5) {
-							System.err.println("  Only "+parts.length+" parts in line: "+line);
+							error("  Only "+parts.length+" parts in line: "+line);
 							line = reader.readLine();
 							continue;
 						}
@@ -63,7 +65,7 @@ public class GraphGenerator {
 						try {
 							score = Double.parseDouble(parts[4]);
 						} catch (IllegalFormatException e) {
-							System.err.println("  Could not parse score: "+score);
+							error("  Could not parse score: "+score);
 						}
 						// Add to map
 						String gameName = parts[0];
@@ -82,13 +84,13 @@ public class GraphGenerator {
 						line = reader.readLine();
 					}
 				} catch (IOException e) {
-					System.err.println("  Something went wrong reading result file:");
+					error("  Something went wrong reading result file:");
 					e.printStackTrace(System.err);
 				}
 			}
 		}
 		catch(SecurityException e) {
-			System.err.println("No permission to read file");
+			error("No permission to read file");
 			e.printStackTrace();
 		}
 		progress("Filling gaps in the data");
@@ -114,23 +116,23 @@ public class GraphGenerator {
 		progress("Done with collecting results, found games: " + gameStats.keySet().toString());
 	}
 
-	public void printDataFile() {
+	public static void printDataFile(Map<String, Map<Long, Double>> toPrint, String fileName, String variableName) {
 		progress("Printing data file");
-		File output = new File("C:\\Coding\\IntelliJ IDEA\\Managing Big Data\\result\\data.php");
+		File output = new File("C:\\Coding\\IntelliJ IDEA\\Managing Big Data\\result\\"+fileName);
 		try {
 			output.getParentFile().mkdirs();
 			output.createNewFile();
 		} catch (IOException e) {
-			System.err.println("Something went wrong while creating the result file:");
+			error("Something went wrong while creating the result file:");
 			e.printStackTrace(System.err);
 		}
 
 		try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
-			writer.write("var stats = {};\n");
-			for(String game : gameStats.keySet()) {
+			writer.write("var "+variableName+" = {};\n");
+			for(String game : toPrint.keySet()) {
 				progress("  Printing data: "+game);
-				Map<Long, Double> gameMap = gameStats.get(game);
-				writer.write("stats[\""+game+"\"] = [");
+				Map<Long, Double> gameMap = toPrint.get(game);
+				writer.write(variableName+"[\""+game+"\"] = [");
 				boolean first = true;
 				for(Map.Entry<Long, Double> entry : gameMap.entrySet()) {
 					if(first) {
@@ -143,7 +145,7 @@ public class GraphGenerator {
 				writer.write("];\n");
 			}
 		} catch (IOException e) {
-			System.err.println("Something went wrong while writing the result file:");
+			error("Something went wrong while writing the result file:");
 			e.printStackTrace(System.err);
 		}
 		progress("Done printing data file");
@@ -153,8 +155,17 @@ public class GraphGenerator {
 	 * Print message to the standard output
 	 * @param message The message to print
 	 */
-	public void progress(String message) {
+	public static void progress(String message) {
 		System.out.println(message);
+	}
+
+	/**
+	 * Print message to the error output
+	 *
+	 * @param message The message to print
+	 */
+	public static void error(String message) {
+		System.err.println(message);
 	}
 
 	/**

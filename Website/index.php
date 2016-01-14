@@ -38,6 +38,12 @@
 			.release {
 
 			}
+			.explanation {
+				max-width: 650px;
+				margin: 15px auto;
+				color: #666;
+				padding: 0 15px 0 15px;
+			}
 			@media all and (max-width: 800px) {
 				.cover, .left {
 					width: 200px;
@@ -73,15 +79,24 @@
 			</div>
 		</div>
 
+		<div class="explanation">
+			<p>
+				The blue graphs represent the number of tweets about the game in a certain day, collected by a MapReduce job crunching through more as 2 billion Dutch tweets (collected by <a href="http://twiqs.nl">Twiqs.nl</a>). The other lines are the number of copies sold for each game, in the 10 weeks after the release date (provided by <a href="http://vgchartz.com">VGChartz</a>). Each line is for a certain game platform.
+			</p>
+		</div>
+
 		<div class="games">
 
 		</div>
 
 		<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 		<script src="https://code.highcharts.com/stock/highstock.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script>
 			<?php include('data.php') ?>
+			<?php include('sold.php') ?>
+			/*
 			var releaseDates = {
 					"Grand Theft Auto V":["17-9-2013 (PS3, X360)", "18-11-2014 (PS4, XOne)", "14-04-2015 (PC)"],
 					"FIFA 15":["25-09-2014"],
@@ -104,17 +119,55 @@
 					"Diablo III":["15-05-2012 (PC)", "03-09-2013 (PS3, X360)", "19-08-2014 (PS4, XOne)"],
 					"Far Cry 4":["18-11-2014"]
 				};
-			console.log(stats);
+			*/
 			$(function() {
 				var count = 0;
 				for(var gameKey in stats) {
+					/*
 					var releaseString = "<ul>";
 					for(key in releaseDates[gameKey]) {
 						releaseString+= "<li>"+releaseDates[gameKey][key]+"</li>";
 					}
-					releaseString += "</ul>";
-					$(".games").append("<div class='gameContainer'><div class='left'><div class='cover' style='background-image: url(\"images/cover_"+gameKey.replace(/[^a-zA-Z1-9]/gi, "")+".jpg\");'></div><div class='release'>"+releaseString+"</div></div><div class='game game"+count+"'></div>"/*<div class='sum"+gameKey.replace(/[^a-zA-Z1-9]/gi, "")+"'></div>*/+"</div>");
+					releaseString += "</ul>";*/
+					$(".games").append("<div class='gameContainer'><div class='left'><div class='cover' style='background-image: url(\"images/cover_"+gameKey.replace(/[^a-zA-Z1-9]/gi, "")+".jpg\");'></div>"/*<div class='release'>"+releaseString+"</div>*/+"</div><div class='game game"+count+"'></div>"/*<div class='sum"+gameKey.replace(/[^a-zA-Z1-9]/gi, "")+"'></div>*/+"</div>");
 					var localCount = count;
+					var series = [];
+					var yAxis = [];
+					// Default series and axis
+					yAxis.push({
+							title: {
+								text: 'Tweet count'
+							}
+						});
+					yAxis.push({
+						title: {
+							text: 'Sold copies',
+						},
+						opposite: false
+					});
+					series.push({
+							name: 'Tweet Count',
+							data: stats[gameKey],
+							tooltip: {
+								valueDecimals: 0
+							},
+							yAxis: 0
+						});
+					// Sold copies series
+					for(var soldKey in sold) {
+						var parts = soldKey.split("@");
+						if(gameKey.indexOf(parts[0]) >= 0) {
+							series.push({
+									name: 'Sold on '+parts[1],
+									data: sold[soldKey],
+									tooltip: {
+										valueDecimals: 0
+									},
+									yAxis: 1
+								});
+						}
+					}
+
 					$('.game'+count).highcharts('StockChart', {
 						rangeSelector: {
 							buttons: [{
@@ -154,19 +207,14 @@
 								}
 							}
 						},*/
+						yAxis: yAxis,
 						title: {
 							text: gameKey
 						},
 						scrollbar : {
 							enabled : false
 						},
-						series: [{
-								name: 'Tweet Count',
-								data: stats[gameKey],
-								tooltip: {
-									valueDecimals: 0
-								}
-							}]
+						series: series
 					});
 					count++;
 				}
